@@ -1,0 +1,39 @@
+Summary Statistics Across All Dates
+==================================================
+
+Sensor: WU311
+Target Temperature: 160°C
+Average Time to Target: 40.5 ± 12.0 mins
+Range: 26.0 - 64.5 mins
+Average Heating Rate: 3.40 ± 0.84°C/min
+
+Sensor: WU312
+Target Temperature: 190°C
+Average Time to Target: 55.8 ± 11.5 mins
+Range: 42.5 - 79.5 mins
+Average Heating Rate: 2.97 ± 0.45°C/min
+
+Sensor: WU314
+Target Temperature: 190°C
+Average Time to Target: 101.9 ± 23.0 mins
+Range: 76.0 - 151.5 mins
+Average Heating Rate: 1.57 ± 0.34°C/min
+
+Sensor: WU321
+Target Temperature: 190°C
+Average Time to Target: 160.9 ± 20.7 mins
+Range: 132.0 - 196.0 mins
+Average Heating Rate: 0.95 ± 0.12°C/min
+
+Sensor: WU322
+Target Temperature: 190°C
+Average Time to Target: 78.5 ± 28.3 mins
+Range: 56.0 - 164.0 mins
+Average Heating Rate: 2.18 ± 0.50°C/min
+
+Sensor: WU323
+Target Temperature: 190°C
+Average Time to Target: 97.4 ± 9.8 mins
+Range: 83.5 - 119.0 mins
+Average Heating Rate: 1.68 ± 0.23°C/min
+
