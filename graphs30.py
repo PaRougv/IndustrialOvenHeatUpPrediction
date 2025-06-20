@@ -2,7 +2,7 @@ import pandas as pd
 import os
 
 # Configuration
-input_file = 'D:/IndustrialOvenHeatUpPrediction/Research Data CED OVEN/020625.CSV'
+input_file = 'D:/IndustrialOvenHeatUpPrediction/Research Data CED OVEN/280425.CSV'
 output_dir = 'D:/IndustrialOvenHeatUpPrediction/Research Data CED OVEN/30s_sampled_data'
 os.makedirs(output_dir, exist_ok=True)
 
@@ -62,7 +62,7 @@ for interval in time_intervals:
 result = pd.DataFrame(sampled_data)
 
 # Save to new CSV
-output_file = os.path.join(output_dir, '020625_30s.CSV')
+output_file = os.path.join(output_dir, '280425_30s.CSV')
 result.to_csv(
     output_file,
     sep='\t',
