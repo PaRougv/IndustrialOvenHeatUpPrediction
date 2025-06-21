@@ -1,7 +1,7 @@
 Industrial Oven Heating Analysis
 ==================================================
 
-Date: 02-Jun-2025
+Date: 02-Jun-2025 Weather : Temperature : 22 C Humidity : 86 %
 --------------------------------------------------
 Sensor: WU311
 Target Temperature: 160°C
@@ -64,7 +64,7 @@ Final Temperature: 192.06°C
 Data Points: 416
 
 
-Date: 05-May-2025
+Date: 05-May-2025 22 C , 66 % 
 --------------------------------------------------
 Sensor: WU311
 Target Temperature: 160°C
@@ -127,7 +127,7 @@ Final Temperature: 194.16°C
 Data Points: 341
 
 
-Date: 07-Apr-2025
+Date: 07-Apr-2025 Temperature : 25.3 C Humidity : 22% @3 AM
 --------------------------------------------------
 Sensor: WU311
 Target Temperature: 160°C
@@ -190,14 +190,14 @@ Final Temperature: 198.24°C
 Data Points: 347
 
 
-Date: 09-Jun-2025
+Date: 09-Jun-2025 Weather : Temperature : 23 C Humidity : 87 %
 --------------------------------------------------
 Sensor: WU311
 Target Temperature: 160°C
 Start Time: 2025-06-09 03:07:54
 Starting Temperature: 31.37°C
-Target Reached Time: 2025-06-09 03:51:55
-Time to Target: 44.0 minutes
+Target Reached Time: 2025-06-09 03:38:55
+Time to Target: 31.0 minutes
 Heating Rate: 2.92°C/min
 Final Temperature: 138.65°C
 Data Points: 407
@@ -253,7 +253,7 @@ Final Temperature: 194.25°C
 Data Points: 407
 
 
-Date: 11-May-2025
+Date: 11-May-2025 24 C , 74 %
 --------------------------------------------------
 Sensor: WU311
 Target Temperature: 160°C
@@ -316,7 +316,7 @@ Final Temperature: 39.20°C
 Data Points: 2899
 
 
-Date: 14-Apr-2025
+Date: 14-Apr-2025 24 C , 41 %
 --------------------------------------------------
 Sensor: WU311
 Target Temperature: 160°C
@@ -379,7 +379,7 @@ Final Temperature: 185.65°C
 Data Points: 380
 
 
-Date: 16-Jun-2025
+Date: 16-Jun-2025 24 C , 85 %
 --------------------------------------------------
 Sensor: WU311
 Target Temperature: 160°C
@@ -442,7 +442,7 @@ Final Temperature: 191.89°C
 Data Points: 360
 
 
-Date: 19-May-2025
+Date: 19-May-2025 24 C , 78 %
 --------------------------------------------------
 Sensor: WU311
 Target Temperature: 160°C
@@ -505,7 +505,7 @@ Final Temperature: 192.31°C
 Data Points: 421
 
 
-Date: 21-Apr-2025
+Date: 21-Apr-2025 24 C , 41 %
 --------------------------------------------------
 Sensor: WU311
 Target Temperature: 160°C
@@ -566,7 +566,7 @@ Final Temperature: 189.65°C
 Data Points: 322
 
 
-Date: 26-May-2025
+Date: 26-May-2025 22 C , 95 %
 --------------------------------------------------
 Sensor: WU311
 Target Temperature: 160°C
@@ -629,7 +629,7 @@ Final Temperature: 193.05°C
 Data Points: 398
 
 
-Date: 28-Apr-2025
+Date: 28-Apr-2025 25 C , 39 %
 --------------------------------------------------
 Sensor: WU311
 Target Temperature: 160°C
