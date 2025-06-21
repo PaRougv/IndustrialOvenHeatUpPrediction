@@ -7,7 +7,15 @@ from datetime import datetime, timedelta
 WEATHER_API_KEY = "18a9e977d32e4a7a8e961308252106"
 LOCATION = "Pune"
 MODEL_PATH = "D:/IndustrialOvenHeatUpPrediction/oven_time_predictor.pkl"
-TARGET_TIME = input("Enter the Time of Start in HH:MM , 3 am in the morning is 03:00 : ")  # Target completion time
+
+def get_target_time():
+    """Get target time from user with validation"""
+    while True:
+        try:
+            time_str = input("Enter target time in HH:MM format (e.g., 03:00 for 3 AM): ")
+            return datetime.strptime(time_str, "%H:%M").time()
+        except ValueError:
+            print("Invalid format! Please use HH:MM (e.g., 06:30)")
 
 # Sensor targets
 SENSOR_TARGETS = {
@@ -22,79 +30,81 @@ SENSOR_TARGETS = {
 def get_weather():
     """Fetch current weather data and calculate oven temperature"""
     url = f"http://api.weatherapi.com/v1/current.json?key={WEATHER_API_KEY}&q={LOCATION}"
-    response = requests.get(url)
-    data = response.json()
-    
-    ambient_temp = data["current"]["temp_c"]
-    oven_temp = ambient_temp + 5  # Add 5°C to atmospheric temperature
-    
-    return {
-        "ambient_temp": ambient_temp,
-        "oven_temp": oven_temp,
-        "humidity": data["current"]["humidity"]
-    }
-
-def calculate_start_times():
-    """Calculate start times for all sensors to reach target by 6:30 AM"""
     try:
-        # Load model and feature names
-        model, feature_names = joblib.load(MODEL_PATH)
+        response = requests.get(url, timeout=5)
+        response.raise_for_status()
+        data = response.json()
         
-        # Get weather and oven temperature
+        ambient_temp = data["current"]["temp_c"]
+        return {
+            "ambient_temp": ambient_temp,
+            "oven_temp": ambient_temp + 8,  # Add 5°C buffer
+            "humidity": data["current"]["humidity"],
+            "conditions": data["current"]["condition"]["text"]
+        }
+    except Exception as e:
+        print(f"Weather API error: {e}")
+        # Return default values if API fails
+        return {
+            "ambient_temp": 25.0,
+            "oven_temp": 30.0,
+            "humidity": 60,
+            "conditions": "Unknown"
+        }
+
+def calculate_start_times(target_time):
+    """Calculate start times for all sensors to reach target by specified time"""
+    try:
+        model, feature_names = joblib.load(MODEL_PATH)
         weather_data = get_weather()
+        
+        # Combine today's date with target time
+        target_datetime = datetime.combine(datetime.today(), target_time)
         current_temp = weather_data["oven_temp"]
         
-        # Calculate for all sensors
         start_times = {}
-        target_datetime = datetime.strptime(TARGET_TIME, "%H:%M")
-        
-        for sensor in SENSOR_TARGETS:
-            # Prepare input data
+        for sensor, target_temp in SENSOR_TARGETS.items():
             input_data = pd.DataFrame({
                 'start_temp': [current_temp],
                 'ambient_temp': [weather_data["ambient_temp"]],
                 'humidity': [weather_data["humidity"]],
-                'target_temp': [SENSOR_TARGETS[sensor]],
-                'sensor_WU311': [1 if sensor == 'WU311' else 0],
-                'sensor_WU312': [1 if sensor == 'WU312' else 0],
-                'sensor_WU314': [1 if sensor == 'WU314' else 0],
-                'sensor_WU321': [1 if sensor == 'WU321' else 0],
-                'sensor_WU322': [1 if sensor == 'WU322' else 0],
-                'sensor_WU323': [1 if sensor == 'WU323' else 0]
+                'target_temp': [target_temp],
+                **{f'sensor_{s}': [1 if s == sensor else 0] for s in SENSOR_TARGETS}
             })[feature_names]
 
-            # Predict heating time (with 10 minute buffer)
-            heating_time = model.predict(input_data)[0] + 10
-            
-            # Calculate start time
+            heating_time = model.predict(input_data)[0] + 10  # 10 min buffer
             start_time = target_datetime - timedelta(minutes=heating_time)
+            
             start_times[sensor] = {
                 'heating_time': heating_time,
                 'start_time': start_time.strftime("%H:%M"),
-                'target_temp': SENSOR_TARGETS[sensor]
+                'target_temp': target_temp
             }
         
-        # Find the earliest required start time
         latest_start = min(start_times.values(), key=lambda x: x['start_time'])
         
-        # Print results
-        print("\nCurrent Conditions:")
+        # Display results
+        print(f"\n{' Current Conditions ':-^40}")
         print(f"Atmospheric Temperature: {weather_data['ambient_temp']}°C")
-        print(f"Calculated Oven Temperature: {current_temp}°C")
-        print(f"Humidity: {weather_data['humidity']}%\n")
+        print(f"Oven Starting Temperature: {current_temp}°C")
+        print(f"Humidity: {weather_data['humidity']}%")
+        print(f"Weather Conditions: {weather_data['conditions']}\n")
         
-        print("Individual Sensor Requirements:")
+        print(f"{' Sensor Requirements ':-^40}")
         for sensor, data in start_times.items():
             print(f"{sensor} (Target: {data['target_temp']}°C):")
-            print(f"→ Heating Time: {data['heating_time']:.1f} minutes")
-            print(f"→ Start By: {data['start_time']}\n")
+            print(f"→ Required Heating Time: {data['heating_time']:.1f} minutes")
+            print(f"→ Latest Start Time: {data['start_time']}\n")
         
-        print(f"\nOPERATIONAL DECISION:")
-        print(f"To reach all targets by {TARGET_TIME}, start ALL burners by:")
-        print(f"→ {latest_start['start_time']} (based on {latest_start['heating_time']:.1f} min heating time)")
+        print(f"{' OPERATIONAL DECISION ':-^40}")
+        print(f"To reach all targets by {target_time.strftime('%H:%M')}:")
+        print(f"→ Start ALL burners by: {latest_start['start_time']}")
+        print(f"→ Based on longest heating time: {latest_start['heating_time']:.1f} minutes")
 
     except Exception as e:
-        print(f"Error: {str(e)}")
+        print(f"\nError: {str(e)}")
 
 if __name__ == "__main__":
-    calculate_start_times()
+    print(f"{' Oven Heating Calculator ':=^40}")
+    target_time = get_target_time()
+    calculate_start_times(target_time)

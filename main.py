@@ -15,7 +15,7 @@ from datetime import datetime
 WEATHER_API_KEY = "18a9e977d32e4a7a8e961308252106"
 LOCATION = "Pune"
 MODEL_PATH = "oven_time_predictor.pkl"
-CSV_PATH = "D:/IndustrialOvenHeatUpPrediction/Research Data CED OVEN/30s_sampled_data/*.CSV"
+CSV_PATH = "D:/IndustrialOvenHeatUpPrediction/Research Data CED OVEN/*.CSV"
 
 # Column names from your CSVs
 COLUMNS = [
