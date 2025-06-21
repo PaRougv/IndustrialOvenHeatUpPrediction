@@ -5,6 +5,8 @@ import glob
 import os
 from datetime import datetime
 
+#this code give the statistics of the data saved in 30s interval
+
 # Configuration
 data_dir = 'D:/IndustrialOvenHeatUpPrediction/Research Data CED OVEN/30s_sampled_data/'
 output_dir = 'D:/IndustrialOvenHeatUpPrediction/Analysis_Results/'

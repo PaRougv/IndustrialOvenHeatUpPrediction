@@ -217,7 +217,7 @@ if __name__ == "__main__":
         )
         
         weather = get_weather()
-        print(f"\nPredicted time to target: {prediction:.1f} minutes")
+        print(f"\nPredicted time to target: {prediction + 10:.1f} minutes")
         print(f"Current weather in {LOCATION}: {weather['temp']}°C, {weather['humidity']}% humidity")
         
     except Exception as e:

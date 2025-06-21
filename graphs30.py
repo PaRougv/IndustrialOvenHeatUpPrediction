@@ -1,6 +1,8 @@
 import pandas as pd
 import os
 
+#convert the CSV files of every seconds data interval to 30s seconds interval
+
 # Configuration
 input_file = 'D:/IndustrialOvenHeatUpPrediction/Research Data CED OVEN/280425.CSV'
 output_dir = 'D:/IndustrialOvenHeatUpPrediction/Research Data CED OVEN/30s_sampled_data'

@@ -3,6 +3,9 @@ import matplotlib.pyplot as plt
 import glob
 import os
 
+#used to buid the Graphs of all the raw data obtained from scada
+
+
 data_dir = 'D:/IndustrialOvenHeatUpPrediction/Research Data CED OVEN/'
 output_dir = 'D:/IndustrialOvenHeatUpPrediction/Research Data CED OVEN/graphs/'
 
