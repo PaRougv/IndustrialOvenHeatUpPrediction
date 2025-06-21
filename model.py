@@ -49,8 +49,10 @@ def load_and_process(file_path):
                     # Find first row reaching target temperature
                     reach_target = df[df[col] >= target_temp].iloc[0]
                     results[sensor_name] = {
-                        'TimeToTarget': reach_target['ElapsedMinutes'],
+                        'StartTime': df['DateTime'].iloc[0].strftime('%Y-%m-%d %H:%M:%S'),
                         'StartTemp': df[col].iloc[0],
+                        'TargetReachedTime': reach_target['DateTime'].strftime('%Y-%m-%d %H:%M:%S'),
+                        'TimeToTarget': reach_target['ElapsedMinutes'],
                         'FinalTemp': df[col].iloc[-1],
                         'HeatingRate': (target_temp - df[col].iloc[0]) / reach_target['ElapsedMinutes'],
                         'TargetTemp': target_temp,
@@ -58,8 +60,10 @@ def load_and_process(file_path):
                     }
                 except IndexError:
                     results[sensor_name] = {
-                        'TimeToTarget': None,
+                        'StartTime': df['DateTime'].iloc[0].strftime('%Y-%m-%d %H:%M:%S'),
                         'StartTemp': df[col].iloc[0],
+                        'TargetReachedTime': None,
+                        'TimeToTarget': None,
                         'FinalTemp': df[col].iloc[-1],
                         'HeatingRate': None,
                         'TargetTemp': target_temp,
@@ -105,7 +109,7 @@ for file_path in glob.glob(os.path.join(data_dir, '*.CSV')):
     except Exception as e:
         print(f"Error processing {file_path}: {str(e)}")
 
-# 4. Generate Analysis Report
+# 4. Generate Analysis Report with Timestamps
 report_path = os.path.join(output_dir, 'heating_analysis_report.txt')
 with open(report_path, 'w') as f:
     f.write("Industrial Oven Heating Analysis\n")
@@ -119,13 +123,15 @@ with open(report_path, 'w') as f:
             res = all_results[date][sensor]
             f.write(f"Sensor: {sensor}\n")
             f.write(f"Target Temperature: {res['TargetTemp']}°C\n")
+            f.write(f"Start Time: {res['StartTime']}\n")
             f.write(f"Starting Temperature: {res['StartTemp']:.2f}°C\n")
             
             if res['TimeToTarget']:
+                f.write(f"Target Reached Time: {res['TargetReachedTime']}\n")
                 f.write(f"Time to Target: {res['TimeToTarget']:.1f} minutes\n")
                 f.write(f"Heating Rate: {res['HeatingRate']:.2f}°C/min\n")
             else:
-                f.write("Did not reach target temperature\n")
+                f.write("Target NOT reached during this session\n")
             
             f.write(f"Final Temperature: {res['FinalTemp']:.2f}°C\n")
             f.write(f"Data Points: {res['DataPoints']}\n")
@@ -133,15 +139,20 @@ with open(report_path, 'w') as f:
         
         f.write("\n")
 
-# 5. Summary Statistics
+# 5. Summary Statistics with Timestamps
 summary_stats = {}
 for sensor in SENSOR_TARGETS.keys():
     times = []
     rates = []
+    start_times = []
+    reach_times = []
+    
     for date in all_results:
         if sensor in all_results[date] and all_results[date][sensor]['TimeToTarget']:
             times.append(all_results[date][sensor]['TimeToTarget'])
             rates.append(all_results[date][sensor]['HeatingRate'])
+            start_times.append(all_results[date][sensor]['StartTime'])
+            reach_times.append(all_results[date][sensor]['TargetReachedTime'])
     
     if times:
         summary_stats[sensor] = {
@@ -150,7 +161,11 @@ for sensor in SENSOR_TARGETS.keys():
             'MinTime': np.min(times),
             'MaxTime': np.max(times),
             'AvgRate': np.mean(rates),
-            'StdRate': np.std(rates)
+            'StdRate': np.std(rates),
+            'EarliestStart': min(start_times) if start_times else None,
+            'LatestStart': max(start_times) if start_times else None,
+            'FastestReach': min(reach_times) if reach_times else None,
+            'SlowestReach': max(reach_times) if reach_times else None
         }
 
 # Save summary statistics
@@ -166,6 +181,10 @@ with open(summary_path, 'w') as f:
         f.write(f"Average Time to Target: {stats['AvgTime']:.1f} ± {stats['StdTime']:.1f} mins\n")
         f.write(f"Range: {stats['MinTime']:.1f} - {stats['MaxTime']:.1f} mins\n")
         f.write(f"Average Heating Rate: {stats['AvgRate']:.2f} ± {stats['StdRate']:.2f}°C/min\n")
+        f.write(f"Earliest Start Time: {stats['EarliestStart']}\n")
+        f.write(f"Latest Start Time: {stats['LatestStart']}\n")
+        f.write(f"Fastest Target Achievement: {stats['FastestReach']}\n")
+        f.write(f"Slowest Target Achievement: {stats['SlowestReach']}\n")
         f.write("\n")
 
 print(f"Analysis complete! Results saved to {output_dir}")
