@@ -20,16 +20,16 @@ This project uses historical oven temperature data to train a predictive model t
 
 IndustrialOvenHeatUpPrediction/
 │
-├── Analysis_Results/ # Output results and analysis
-├── Research Data CED OVEN/ # Raw experimental oven data
+├── Analysis_Results/          # Output results and analysis
+├── Research Data CED OVEN/    # Raw experimental oven data
 │
-├── main.py # Data preprocessing & model pipeline
-├── predict.py # Predict heat-up time for a target temperature
-├── graphs.py # Data visualization and plots
-├── datastats.py # Statistical analysis of dataset
+├── main.py                   # Data preprocessing & model pipeline
+├── predict.py                # Predict heat-up time for a target temperature
+├── graphs.py                 # Data visualization and plots
+├── datastats.py              # Statistical analysis of dataset
 │
-├── oven_time_predictor.pkl # Trained ML model
-├── requirements.txt # Project dependencies
-└── README.md # Project documentation
+├── oven_time_predictor.pkl   # Trained ML model
+├── requirements.txt          # Project dependencies
+└── README.md                 # Project documentation
 
 
